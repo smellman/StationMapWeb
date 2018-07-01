@@ -22,13 +22,15 @@
     })
     rosen.on('selectStation', (data) => {
       if (data.stations.length > 0) {
-        const station = data.stations[0]
+        var station = data.stations[0]
         rosen.setStationMarker(station.code)
-        const ret = {
+        var ret = {
           code: station.code,
           name: station.name,
         }
-        window.postMessage(JSON.stringify(ret))
+        var ret_string = JSON.stringify(ret)
+        console.log(let_string)
+        window.postMessage(ret_string)
       }
     })
   }
