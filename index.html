@@ -21,11 +21,15 @@
       apiKey: api_key,
     })
   }
-  window.addEventListener('message', (event) => {
+  document.addEventListener('message', (event) => {
     if (event && event.data) {
-      data = JSON.parse(event.data)
-      if (data.type == "init_map") {
-        init(data.api_key)
+      try {
+        data = JSON.parse(event.data)
+        if (data.type == "init_map") {
+          init(data.api_key)
+        }
+      } catch (e) {
+        console.log('invalid json')
       }
     }
   })
