@@ -23,7 +23,6 @@
     rosen.on('selectStation', (data) => {
       if (data.stations.length > 0) {
         var station = data.stations[0]
-        rosen.setStationMarker(station.code)
         var ret = {
           code: station.code,
           name: station.name,
@@ -31,6 +30,7 @@
         var ret_string = JSON.stringify(ret)
         console.log(let_string)
         window.postMessage(ret_string)
+        rosen.setStationMarker(station.code)
       }
     })
   }
