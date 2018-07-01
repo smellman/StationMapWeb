@@ -21,11 +21,12 @@
       apiKey: api_key,
     })
     rosen.on('selectStation', (data) => {
+      window.postMessage('test')
       if (data.stations.length > 0) {
         var station = data.stations[0]
         var ret = {
-          code: station.code,
-          name: station.name,
+          "code": station.code,
+          "name": station.name,
         }
         var ret_string = JSON.stringify(ret)
         console.log(ret_string)
