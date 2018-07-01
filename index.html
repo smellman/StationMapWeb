@@ -22,9 +22,11 @@
     })
   }
   window.addEventListener('message', (event) => {
-    data = JSON.parse(event.data)
-    if (data.type == "init_map") {
-      init(data.api_key)
+    if (event && event.data) {
+      data = JSON.parse(event.data)
+      if (data.type == "init_map") {
+        init(data.api_key)
+      }
     }
   })
   </script>
