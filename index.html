@@ -20,7 +20,7 @@
     rosen = new Rosen("map", {
       apiKey: api_key,
     })
-    rosen.on('stationSelect', (data) => {
+    rosen.on('selectStation', (data) => {
       if (data.stations.length > 0) {
         const station = data.stations[0]
         rosen.setStationMarker(station.code)
