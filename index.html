@@ -20,6 +20,17 @@
     rosen = new Rosen("map", {
       apiKey: api_key,
     })
+    rosen.on('stationSelect', (data) => {
+      if (data.stations.length > 0) {
+        const station = data.stations[0]
+        rosen.setStationMarker(station.code)
+        const ret = {
+          code: station.code,
+          name: station.name,
+        }
+        window.postMessage(JSON.stringify(ret))
+      }
+    })
   }
   document.addEventListener('message', (event) => {
     if (event && event.data) {
