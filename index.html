@@ -16,12 +16,15 @@
   <div id="map"></div>
   <script>
   var rosen;
+
   function init(api_key) {
+    window.postMessageReactNative = window.postMessage
+    window.postMessage = window.originalPostMessage
     rosen = new Rosen("map", {
       apiKey: api_key,
     })
-    rosen.on('selectStation', (data) => {
-      window.postMessage('test')
+
+    rosen.on('selectStation', function(data){
       if (data.stations.length > 0) {
         var station = data.stations[0]
         var ret = {
@@ -29,12 +32,31 @@
           "name": station.name,
         }
         var ret_string = JSON.stringify(ret)
-        console.log(ret_string)
-        window.postMessage(ret_string)
         rosen.setStationMarker(station.code)
+        window.postMessageReactNative(ret_string)
       }
     })
   }
+
+  function clear_all() {
+    rosen.clearAll()
+  }
+
+  function highlight_section(line_code, station_code1, station_code2) {
+    rosen.getSectionsByStations(line_code, station_code1, station_code2).then(function(sections) {
+      var section_codes = sections.map(function(section) {
+        return section.code
+      })
+      rosen.highlightSections(section_codes)
+    })
+  }
+
+  function set_station_markers(stations) {
+    stations.forEach(function(station_code) {
+      rosen.setStationMarker(station_code)
+    })
+  }
+
   document.addEventListener('message', (event) => {
     if (event && event.data) {
       try {
@@ -42,8 +64,17 @@
         if (data.type == "init_map") {
           init(data.api_key)
         }
+        if (data.type == "clear_all") {
+          clear_all()
+        }
+        if (data.type == "highlight_section") {
+          highlight_section(data.line_code, data.station_code1, data.station_code2)
+        }
+        if (data.type == "set_station_markers") {
+          set_station_markers(data.stations)
+        }
       } catch (e) {
-        console.log('invalid json')
+        console.log(e)
       }
     }
   })
